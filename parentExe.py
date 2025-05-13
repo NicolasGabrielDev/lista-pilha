@@ -13,38 +13,24 @@ def is_balanced(expression):
     """
     pilha = Stack()
 
-    for l in expression:
-        pilha.push(l)
-
-    if pilha.size() == 0:
-        return False
-    
-    dic = {
-        "{": 0,
-        "}": 0,
-        "[": 0,
-        "]": 0,
-        "(": 0,
-        ")": 0
+    aberturas = ["{", "(", "["]
+    fechamentos = ["}", ")", "]"]
+    correspondentes = {
+        "{": "}",
+        "(": ")",
+        "[": "]"
     }
 
-    while not pilha.is_empty():
-        el = pilha.pop()
-        if el in dic:
-            dic[el] += 1
-    
-    if dic["{"] != dic["}"]:
-        return False
+    for l in expression:
+        if l in aberturas:
+            pilha.push(l)
+        elif l in fechamentos:
+            if not pilha.is_empty() and correspondentes[pilha.peek()] == l:
+                pilha.pop()
+            else:
+                return False
 
-    if dic["["] != dic["]"]:
-        return False
-
-    if dic["("] != dic[")"]:
-        return False
-    
-    return True
-    
-
+    return pilha.is_empty()
 
 # Teste
 print(is_balanced("[{}()]{}")) #Esperado True
